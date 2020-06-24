@@ -11,6 +11,7 @@
 
     <modules>
         <module>loader</module>
+        <module>rs232</module>
     </modules>
 
     <properties>
