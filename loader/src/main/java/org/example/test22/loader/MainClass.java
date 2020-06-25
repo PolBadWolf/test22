@@ -1,12 +1,17 @@
 package org.example.test22.loader;
 
 import org.example.test22.rs232.*;
+import org.example.test22.screen.MainFrame;
 
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.Arrays;
 
 public class MainClass {
     private static MainClass mainClass = null;
-    private Interface_RS232 rs232;
+    protected Interface_RS232 rs232;
+    private MainFrame mainFrame;
+
     public static void main(String[] args) {
         mainClass = new MainClass();
         if (args.length == 0)   mainClass.start(null);
@@ -31,12 +36,44 @@ public class MainClass {
         System.out.println("Port \"" + name + "\" is open");
         rs232.reciveStart();
         //
-        while (rs232.reciveStart()) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        mainFrame = MainFrame.Create();
+        mainFrame.addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+
             }
-        }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                rs232.reciveStop();
+                System.exit(0);
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+
+            }
+        });
+        //
     }
 }
