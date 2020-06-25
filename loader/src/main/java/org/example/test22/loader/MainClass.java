@@ -1,16 +1,15 @@
 package org.example.test22.loader;
 
 import org.example.test22.rs232.*;
-import org.example.test22.screen.MainFrame;
+import org.example.test22.screen.*;
 
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import java.awt.event.*;
 import java.util.Arrays;
 
 public class MainClass {
     private static MainClass mainClass = null;
     protected Interface_RS232 rs232;
-    private MainFrame mainFrame;
+    private Interface_MainFrame mainFrame;
 
     public static void main(String[] args) {
         mainClass = new MainClass();
