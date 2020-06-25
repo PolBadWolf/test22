@@ -8,6 +8,11 @@ public class RS232 implements Interface_RS232 {
     private static RS232 rs232 = null;
     private SerialPort port = null;
 
+    @Override
+    public Interface_RS232 getRS232() {
+        return rs232;
+    }
+
     public static RS232 Create() {
         if (rs232 == null)  rs232 = new RS232();
         return rs232;
@@ -48,12 +53,23 @@ public class RS232 implements Interface_RS232 {
     }
 
     @Override
-    public boolean init(String portName, RS232.BAUD baud) {
+    public int init(String portName, RS232.BAUD baud) {
+        boolean tmpFlag = false;
+        // check exist port
+        String name = portName.toUpperCase();
+        SerialPort[] ports = SerialPort.getCommPorts();
+        for (int i = 0; i < ports.length; i++) {
+            if (ports[i].getSystemPortName().toUpperCase().equals(name)) tmpFlag = true;
+        }
+        if (!tmpFlag)   return INITCODE_NOTEXIST;
+        // open port
         port = SerialPort.getCommPort(portName);
         port.setComPortParameters(baud.getValue(), 8, SerialPort.TWO_STOP_BITS, SerialPort.NO_PARITY);
         port.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
         port.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING, 1000, 1000);
-        return port.openPort(200);
+        tmpFlag = port.openPort(200);
+        if (!tmpFlag)   return INITCODE_ERROROPEN;
+        return INITCODE_OK;
     }
 
     @Override
