@@ -7,6 +7,7 @@ import com.fazecast.jSerialComm.SerialPortEvent;
 public class RS232 implements Interface_RS232 {
     private static RS232 rs232 = null;
     private SerialPort port = null;
+    private boolean reciveStat = false;
 
     @Override
     public Interface_RS232 getRS232() {
@@ -40,6 +41,7 @@ public class RS232 implements Interface_RS232 {
 }
 
     private RS232() {
+        reciveStat = false;
     }
 
     @Override
@@ -78,25 +80,36 @@ public class RS232 implements Interface_RS232 {
         if (!port.isOpen()) return false;
         port.removeDataListener();
         port.addDataListener(new ReciveListener());
+        reciveStat = true;
         return true;
     }
 
     @Override
     public void reciveStop() {
         port.removeDataListener();
+        reciveStat = false;
     }
 
     private static class ReciveListener implements SerialPortDataListener {
         @Override
         public int getListeningEvents() {
-            return 100;
+            return SerialPort.LISTENING_EVENT_DATA_AVAILABLE;
         }
 
         @Override
         public void serialEvent(SerialPortEvent event) {
             SerialPort curPort = event.getSerialPort();
-            byte[] bytes = null;
-            curPort.readBytes(bytes, 1);
+            byte[] bytes = new byte[1];
+            int num;
+            while ((num = curPort.readBytes(bytes, bytes.length)) > 0) {
+                System.out.printf(" 0x%02X", bytes[0]);
+            }
+            System.out.println();
         }
+    }
+
+    @Override
+    public boolean getRecive() {
+        return reciveStat;
     }
 }

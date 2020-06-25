@@ -31,5 +31,12 @@ public class MainClass {
         System.out.println("Port \"" + name + "\" is open");
         rs232.reciveStart();
         //
+        while (rs232.reciveStart()) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
