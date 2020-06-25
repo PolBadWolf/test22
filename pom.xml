@@ -12,6 +12,7 @@
     <modules>
         <module>loader</module>
         <module>rs232</module>
+        <module>screen</module>
     </modules>
 
     <properties>
